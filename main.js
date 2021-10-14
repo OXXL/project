@@ -1,3 +1,4 @@
+const arenas = document.querySelector('.arenas');
 
 let player1 = {
     name:'Scorpion',
@@ -40,12 +41,10 @@ function createPlayer(playerclass, object) {
     progressbar.appendChild(life);
     character.appendChild(img);
     
-
     life.style.width = object.hp + '%';
     name.innerText = object.name;
     img.src = object.img;
 
-    const arenas = document.querySelector('.arenas');
     arenas.appendChild(player);
 }
 
