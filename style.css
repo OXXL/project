@@ -151,7 +151,7 @@ body {
 .name {
     position: absolute;
     font-family: 'Mortal Kombat 3';
-    font-size: 26px;
+    font-size: 20px;
     line-height: 20px;
     letter-spacing: 2px;
     color: #efefef;
@@ -261,6 +261,10 @@ body {
 .button:active::after {
     top: 1px;
 }
+
+.buttonHidden {
+    display: none;
+}   
 
 .loseTitle {
     position: absolute;
