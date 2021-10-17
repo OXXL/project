@@ -88,9 +88,13 @@ randomButton.addEventListener('click', function () {
         if (player2.hp > player1.hp) {
             arenas.appendChild(playerWin(player2.name));
             
-        } else {
+        } else if ((player2.hp < player1.hp)) {
             arenas.appendChild(playerWin(player1.name));
            
+        } else {
+            const winTitle = createElement('div', 'winTitle');
+            winTitle.innerText ='   Ничья'; 
+            arenas.appendChild(winTitle);
         }
     }
 })
