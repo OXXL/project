@@ -7,9 +7,12 @@ let player1 = {
     hp: 100,
     img:'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['sword'],
-    atack: function(){
+    atack: function() {
         console.log(this.name + 'Fight...');
-    }
+    },
+    changeHP: changeHP,
+    elHP: elHP,
+    renderHP: renderHP
 }
 
 let player2 = {
@@ -20,10 +23,30 @@ let player2 = {
     weapon: ['bamboo sticks'],
     atack: function(){
         console.log(this.name + 'Fight...');
-    }
+    },
+    changeHP: changeHP,
+    elHP: elHP,
+    renderHP: renderHP
 }
 
-function getRandomInt(min, max) {
+function changeHP (getRandom_max) {
+    this.hp -= getRandom_max;
+    if (this.hp <= 0) {
+        this.hp = 0; 
+    }
+    return this.hp;
+}
+
+function elHP() {
+    return  document.querySelector('.player' + this.player + ' .life');
+}
+
+function renderHP () {
+    console.log(this.elHP());
+    this.elHP().life.style.width = this.hp + '%';
+}
+
+function getRandom(max, min = 1) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -35,26 +58,24 @@ function createElement(element, className) {
     return tag;
 }
 
-function playerWin(name) {
-    const winTitle = createElement('div', 'winTitle');
-    winTitle.innerText = name + '  Win'; 
-    return winTitle;
+function createReloadButton(){
+    const reloadWrap = createElement('div', 'reloadWrap');
+    const button = createElement('button', 'button');
+
+    reloadWrap.appendChild(button);
+    button.innerText = '  Restart'; 
+
 }
 
-function changeHP(playerObj) {
-    const playerLife = document.querySelector('.player' + playerObj.player + ' .life');
-    playerObj.hp -= getRandomInt(1, 20);
-    playerLife.style.width = playerObj.hp + '%';
-    console.log(playerObj.hp);
+function playerWin(name) {
+    const winTitle = createElement('div', 'loseTitle');
+    if (name) {
+        winTitle.innerText = name + '  WIN'; 
+    } else {
+        winTitle.innerText = '  DRAW'; 
+    }
 
-    if (playerObj.hp <= 0) {
-        randomButton.disabled = true;
-        playerLife.style.width = 0 + '%';
-        playerObj.hp = 0; 
-    };
-
-    return playerObj.hp;
-
+    return winTitle;
 }
 
 function createPlayer(object) {
@@ -72,31 +93,33 @@ function createPlayer(object) {
     progressbar.appendChild(life);
     character.appendChild(img);
     
-    life.style.width = 100 + '%';
+    life.style.width = object.hp + '%';
     nameDiv.innerText = object.name;
     img.src = object.img;
 
     return player
 }
 
-randomButton.addEventListener('click', function () {
-    let playerHP1 = changeHP(player1);
-    let playerHP2 = changeHP(player2);
+randomButton.addEventListener('click', function () { 
+    // player1.elHP();
+    player1.changeHP(getRandom(20));
+    player1.renderHP();
+    // player2.elHP();
+    player2.changeHP(getRandom(20));
+    player2.renderHP();
 
-    if (playerHP1 <= 0 || playerHP2 <= 0) {
-        
-        if (player2.hp > player1.hp) {
-            arenas.appendChild(playerWin(player2.name));
-            
-        } else if ((player2.hp < player1.hp)) {
-            arenas.appendChild(playerWin(player1.name));
-           
-        } else {
-            const winTitle = createElement('div', 'winTitle');
-            winTitle.innerText ='   Ничья'; 
-            arenas.appendChild(winTitle);
-        }
+    if (player1.hp === 0 || player2.hp === 0) {
+        randomButton.disabled = true;
     }
+    
+    if (player1.hp === 0 && player1.hp < player2.hp) {
+            arenas.appendChild(playerWin(player2.name));
+    } else if ((player2.hp === 0 && player2.hp < player1.hp)) {
+            arenas.appendChild(playerWin(player1.name));     
+    } else if (player2.hp === 0 && player1.hp === 0){
+            arenas.appendChild(playerWin());
+    }
+
 })
 
 arenas.appendChild(createPlayer(player1));
