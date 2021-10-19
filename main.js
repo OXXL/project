@@ -106,8 +106,6 @@ randomButton.addEventListener('click', function () {
     
     player1.changeHP(getRandom(20));
     player2.changeHP(getRandom(20));
-    player1.elHP();
-    player2.elHP();
     player1.renderHP();
     player2.renderHP();
     
