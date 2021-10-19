@@ -34,16 +34,16 @@ function changeHP (getRandom_max) {
     if (this.hp <= 0) {
         this.hp = 0; 
     }
-    return this.hp;
+    console.log(this.hp);
 }
 
 function elHP() {
     return  document.querySelector('.player' + this.player + ' .life');
+    // return document.querySelector(`.player${this.player} .life`);
 }
 
 function renderHP () {
-    console.log(this.elHP());
-    this.elHP().life.style.width = this.hp + '%';
+    this.elHP().style.width = this.hp + '%';
 }
 
 function getRandom(max, min = 1) {
@@ -64,7 +64,10 @@ function createReloadButton(){
 
     reloadWrap.appendChild(button);
     button.innerText = '  Restart'; 
-
+    button.addEventListener('click', function () {
+        window.location.reload();
+    })
+    return reloadWrap;
 }
 
 function playerWin(name) {
@@ -74,7 +77,6 @@ function playerWin(name) {
     } else {
         winTitle.innerText = '  DRAW'; 
     }
-
     return winTitle;
 }
 
@@ -101,15 +103,18 @@ function createPlayer(object) {
 }
 
 randomButton.addEventListener('click', function () { 
-    // player1.elHP();
+    
     player1.changeHP(getRandom(20));
-    player1.renderHP();
-    // player2.elHP();
     player2.changeHP(getRandom(20));
+    player1.elHP();
+    player2.elHP();
+    player1.renderHP();
     player2.renderHP();
+    
 
     if (player1.hp === 0 || player2.hp === 0) {
         randomButton.disabled = true;
+        arenas.appendChild(createReloadButton());
     }
     
     if (player1.hp === 0 && player1.hp < player2.hp) {
