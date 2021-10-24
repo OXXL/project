@@ -207,8 +207,8 @@ function generateLogs(type, player1, player2, playerAttack) {
     let text = '';
     let el = '';
     const elemRand = getRandom(logs[type].length)-1;
-    const time = new Date();
-    const gameTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+    const gameTime = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    // const gameTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
     switch(type) {
         case 'hit':
             text = logs['hit'][elemRand].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
