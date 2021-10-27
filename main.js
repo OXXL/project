@@ -1,67 +1,6 @@
-import {$arenas, $formFight, $chat, logs, $fightButton} from './src.js';
-import {getRandom, createElement, enemyAttack, playerAttack, createReloadButton, playerWin} from './util.js';
+import {$arenas, $formFight, $chat, logs, player1, player2} from './src.js';
+import {getRandom, createElement, enemyAttack, playerAttack, playerHPWin} from './util.js';
 
-let player1 = {
-    player: 1,
-    name: 'Scorpion',
-    hp: 100,
-    img:'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
-    weapon: ['sword'],
-    atack: function() {
-        console.log(this.name + 'Fight...');
-    },
-    changeHP,
-    elHP,
-    renderHP
-}
-
-let player2 = {
-    player: 2,
-    name: 'Sonya',
-    hp: 100,
-    img: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
-    weapon: ['bamboo sticks'],
-    atack: function(){
-        console.log(this.name + 'Fight...');
-    },
-    changeHP,
-    elHP,
-    renderHP
-}
-
-function changeHP (value) {
-    this.hp -= value;
-    if (this.hp <= 0) {
-        this.hp = 0; 
-    }
-}
-
-function elHP() {
-    // return  document.querySelector('.player' + this.player + ' .life');
-    return document.querySelector(`.player${this.player} .life`);
-}
-
-function renderHP () {
-    this.elHP().style.width = this.hp + '%';
-}
-
-const playerHPWin = () => {
-    if (player1.hp === 0 || player2.hp === 0) {
-        $fightButton.disabled = true;
-        $arenas.appendChild(createReloadButton());
-    }
-    
-    if (player1.hp === 0 && player1.hp < player2.hp) {
-        $arenas.appendChild(playerWin(player2.name));
-        generateLogs('end', player2,  player1);
-    } else if ((player2.hp === 0 && player2.hp < player1.hp)) {
-        $arenas.appendChild(playerWin(player1.name));    
-        generateLogs('end', player1,  player2); 
-    } else if (player2.hp === 0 && player1.hp === 0) {
-        $arenas.appendChild(playerWin());
-        generateLogs('draw', player2,  player1);
-    }
-}
 
 const createPlayer = ({player, hp, name, img}) => {
     
@@ -85,7 +24,7 @@ const createPlayer = ({player, hp, name, img}) => {
     return $player
 }
 
-const  generateLogs = (type, player1, player2, playerAttack) => { 
+export const  generateLogs = (type, player1, player2, playerAttack) => { 
     let text = '';
     let el = '';
     const elemRand = getRandom(logs[type].length)-1;

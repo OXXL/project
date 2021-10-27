@@ -1,4 +1,5 @@
-import {ATTACK, HIT, $formFight} from './src.js';
+import {ATTACK, HIT, $formFight, $fightButton, $arenas, player1, player2} from './src.js';
+import {generateLogs} from './main.js';
 
 export const getRandom = (max, min = 1) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -55,7 +56,7 @@ export const createReloadButton = () => {
     return $reloadWrap;
 }
 
-export const playerWin = (name) => {
+const playerWin = (name) => {
     const $winTitle = createElement('div', 'loseTitle');
     if (name) {
         $winTitle.innerText = name + '  WIN'; 
@@ -63,4 +64,22 @@ export const playerWin = (name) => {
         $winTitle.innerText = '  DRAW'; 
     }
     return $winTitle;
+}
+
+export const playerHPWin = () => {
+    if (player1.hp === 0 || player2.hp === 0) {
+        $fightButton.disabled = true;
+        $arenas.appendChild(createReloadButton());
+    }
+    
+    if (player1.hp === 0 && player1.hp < player2.hp) {
+        $arenas.appendChild(playerWin(player2.name));
+        generateLogs('end', player2,  player1);
+    } else if ((player2.hp === 0 && player2.hp < player1.hp)) {
+        $arenas.appendChild(playerWin(player1.name));    
+        generateLogs('end', player1,  player2); 
+    } else if (player2.hp === 0 && player1.hp === 0) {
+        $arenas.appendChild(playerWin());
+        generateLogs('draw', player2,  player1);
+    }
 }
