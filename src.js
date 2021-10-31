@@ -3,6 +3,7 @@ export const $fightButton = document.querySelector('.button');
 export const $formFight = document.querySelector('.control');
 export const $chat = document.querySelector('.chat');
 
+export const getRandom = (max, min = 1) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const HIT = {
     head: 30,
@@ -50,3 +51,97 @@ export const logs = {
     ],
     draw: 'Ничья - это тоже победа!'
 };
+
+export const enemyAttack = () => {
+    const hit = ATTACK[getRandom(3) - 1];
+    const defence = ATTACK[getRandom(3) - 1];
+    return {
+        value: getRandom(HIT[hit]),
+        hit,
+        defence,
+    }
+}
+
+// const playerAttack = () => {
+//     const attack = {};
+
+//     for (let item of $formFight) {
+//         if (item.checked && item.name === 'hit') {
+//             attack.value = getRandom(HIT[item.value]);
+//             attack.hit = item.value;
+//         }
+
+//         if (item.checked && item.name === 'defence') {
+//             attack.defence = item.value;
+//         }
+
+//         item.checked = false;
+//     }
+
+//     return attack;
+// }
+
+export const createElement = (element, className) => {
+    const $element = document.createElement(element);
+    if (className) {
+        $element.classList.add(className);
+    }
+    return $element;
+}
+
+
+export const createReloadButton = () => {
+    const $reloadWrap = createElement('div', 'reloadWrap');
+    const $button = createElement('button', 'button');
+
+    $reloadWrap.appendChild($button);
+    $button.innerText = '  Restart'; 
+    $button.addEventListener('click', () => {
+        // window.location.reload();
+        setTimeout(() => {
+            window.location.pathname = 'index.html';
+        }, 1000);
+    })
+    return $reloadWrap;
+}
+
+export const playerWin = (name) => {
+    const $winTitle = createElement('div', 'loseTitle');
+    if (name) {
+        $winTitle.innerText = name + '  WIN'; 
+    } else {
+        $winTitle.innerText = '  DRAW'; 
+    }
+    return $winTitle;
+}
+
+export const generateLogs = (type, {name} = {}, {name: playerName2, hp} = {}, playerAttack) => { 
+    let text = '';
+    let el = '';
+    const elemRand = getRandom(logs[type].length)-1;
+    const gameTime = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    // const gameTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+    switch(type) {
+        case 'hit':
+            text = logs['hit'][elemRand].replace('[playerKick]', name).replace('[playerDefence]', playerName2);
+            el = `<p>${gameTime} - ${text} ${-playerAttack} [${hp}/100]</p>`;
+            break;
+        case 'defence':
+            text = logs['defence'][elemRand].replace('[playerKick]', name).replace('[playerDefence]', playerName2);
+            el = `<p>${gameTime} - ${text}</p>`;
+            break;
+        case 'draw':
+            text = logs.draw;
+            el = `<p>${gameTime} - ${text}</p>`;
+            break;
+        case 'start':
+            text = logs.start.replace('[time]', gameTime).replace('[player1]', name).replace('[player2]', playerName2);
+            el = `<p>${text}</p>`;
+            break;
+        case 'end':
+            text = logs['end'][elemRand].replace('[playerWins]', name).replace('[playerLose]', playerName2);
+            el = `<p>${gameTime} - ${text}</p>`;
+            break;
+    }
+    $chat.insertAdjacentHTML('afterbegin', el);
+}
